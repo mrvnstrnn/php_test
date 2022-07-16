@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\User;
+use App\Models\Post;
+use Validator;
 
 class HomeController extends Controller
 {
@@ -36,10 +38,13 @@ class HomeController extends Controller
                             ->first();
                             
             $users = '';
+            $posts = '';
 
             if ( !is_null($my_component) ) {
                 if ( $my_component->components == 'admin-component' ) {
                     $users = User::get();
+                } else {
+                    $posts = Post::get_approved_post();
                 }
                 $my_component = $my_component->components;
             } else {
@@ -50,12 +55,48 @@ class HomeController extends Controller
             return view('my-component', 
                             compact(
                                 'my_component',
-                                'users'
+                                'users',
+                                'posts'
                             )
                         );
 
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    public function post_status (Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                '*' => ['required']
+            ]);
+
+            if ( $validator->passes() ) {
+            
+                Post::create([
+                    'user_id' => \Auth::id(),
+                    'title' => $request->get('title'),
+                    'paragraph' => $request->get('paragraph'),
+                    'status' => 0,
+                ]);
+    
+                return response()->json([
+                    'error' => false,
+                    'message' => "Successfully post status."
+                ]);
+            } else {
+                return response()->json([
+                    'error' => true,
+                    'message' => $validator->errors()
+                ]);
+            }
+
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => true,
+                'message' => $th->getMessage()
+            ]);
         }
     }
 }
