@@ -18,7 +18,7 @@ class Post extends Model
         return Post::select('user_posts.*', 'users.name')
             ->join('users', 'users.id', 'user_posts.user_id')
             ->where('user_posts.user_id', $user_id)
-            ->where('status', $post_status)
+            ->whereIn('status', $post_status)
             ->get();
     }
 }

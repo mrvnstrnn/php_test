@@ -44,7 +44,7 @@ class HomeController extends Controller
                 if ( $my_component->components == 'admin-component' ) {
                     $users = User::get();
                 } else {
-                    $posts = Post::get_approved_post(\Auth::id(), 1);
+                    $posts = Post::get_approved_post(\Auth::id(), [0, 1, 2]);
                 }
                 $my_component = $my_component->components;
             } else {
@@ -103,7 +103,7 @@ class HomeController extends Controller
     public function view_user ($user_id)
     {
         try {
-            $posts = Post::get_approved_post($user_id, 0);
+            $posts = Post::get_approved_post($user_id, [0]);
 
             $user = User::where('id', $user_id)
                         ->first();

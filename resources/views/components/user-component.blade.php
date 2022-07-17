@@ -32,9 +32,29 @@
         <div class="row justify-content-center mt-3">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header bg-dark text-white">
+                    @php
+                        $header = "bg-dark";
+                        $badge = "Pending";
+
+                        if ( $post->status == 0) {
+                            $header = "bg-warning";
+                            $badge = "Pending";
+                        } else if ( $post->status == 1) {
+                            $header = "bg-success";
+                            $badge = "Approved";
+                        } else if ( $post->status == 2) {
+                            $header = "bg-danger";
+                            $badge = "Rejected";
+                        }
+
+                    @endphp
+                    <div class="card-header text-white {{ $header }}">
                         {{ $post->name }}<br>
                         <small>{{ date('M d, Y', strtotime($post->created_at)); }} at {{ date('h:m:s', strtotime($post->created_at)); }}</small>
+                        <br>
+                        <span class="badge badge-primary bg-dark">
+                            {{ $badge }}
+                        </span>
                     </div>
     
                     <div class="card-body">
