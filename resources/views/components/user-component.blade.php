@@ -29,7 +29,7 @@
 
 <div class="post_lists">
     @forelse ($posts as $post)
-        <div class="row justify-content-center">
+        <div class="row justify-content-center mt-3">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header bg-dark text-white">
@@ -91,6 +91,8 @@
                 },
                 error: function (resp) {
                     alert(resp);
+                    $(".post_status").removeAttr("disabled");
+                    $(".post_status").text("Post");
                 }
             });
         }

@@ -13,12 +13,12 @@ class Post extends Model
 
     protected $table = "user_posts";
 
-    function get_approved_post()
+    function get_approved_post($user_id, $post_status)
     {
         return Post::select('user_posts.*', 'users.name')
             ->join('users', 'users.id', 'user_posts.user_id')
-            ->where('user_posts.user_id', \Auth::id())
-            ->where('status', 1)
+            ->where('user_posts.user_id', $user_id)
+            ->where('status', $post_status)
             ->get();
     }
 }

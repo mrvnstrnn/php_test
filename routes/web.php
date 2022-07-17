@@ -22,3 +22,5 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/component/{user_id}', [App\Http\Controllers\HomeController::class, 'component_viewer'])->name('component_viewer');
 Route::post('/post-status', [App\Http\Controllers\HomeController::class, 'post_status'])->name('post_status');
+Route::get('/view-user/{user_id}', [App\Http\Controllers\HomeController::class, 'view_user'])->name('view_user');
+Route::post('/approve-reject-post', [App\Http\Controllers\HomeController::class, 'approve_reject'])->name('approve_reject');

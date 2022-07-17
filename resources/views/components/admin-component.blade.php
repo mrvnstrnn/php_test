@@ -10,6 +10,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -20,6 +21,7 @@
                                 <tr>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
+                                    <td><a href="{{ route('view_user', $user->id) }}" class="btn btn-primary">View</a></td>
                                 </tr>
                             @endforeach
                         </tbody>

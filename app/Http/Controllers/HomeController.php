@@ -44,7 +44,7 @@ class HomeController extends Controller
                 if ( $my_component->components == 'admin-component' ) {
                     $users = User::get();
                 } else {
-                    $posts = Post::get_approved_post();
+                    $posts = Post::get_approved_post(\Auth::id(), 1);
                 }
                 $my_component = $my_component->components;
             } else {
@@ -92,6 +92,46 @@ class HomeController extends Controller
                 ]);
             }
 
+        } catch (\Throwable $th) {
+            return response()->json([
+                'error' => true,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
+    public function view_user ($user_id)
+    {
+        try {
+            $posts = Post::get_approved_post($user_id, 0);
+
+            $user = User::where('id', $user_id)
+                        ->first();
+
+            return view('view-user', 
+                            compact(
+                                'posts',
+                                'user'
+                            )
+                        );
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function approve_reject (Request $request)
+    {
+        try {
+            Post::where('id', $request->get('id'))
+                ->update([
+                    'status' => $request->get('action') == 'reject' ? 2 : 1
+                ]);
+
+            return response()->json([
+                'error' => false,
+                'message' => "Successfully " .$request->get('action') == 'reject' ? "rejected " : "approved ". "post."
+            ]);
         } catch (\Throwable $th) {
             return response()->json([
                 'error' => true,
